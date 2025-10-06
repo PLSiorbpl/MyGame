@@ -10,7 +10,7 @@ Last_Compiled = "Last_Compiled.txt"
 Source_Includes = ['-I', 'MyCraft/src']
 Flags = ['-std=c++17', '-static-libstdc++', '-static-libgcc', '-static']
 Error = False
-Destination = "../MyGame.exe"
+Destination = "./MyGame.exe"
 
 # Paths
 Base = ""
