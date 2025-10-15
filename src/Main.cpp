@@ -15,6 +15,7 @@ HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 int Menu() {
     int Pozycja = 0;
+    std::string enter;
     while (true) {
         SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         std::cout << "/-------------------------------------------------------------------------------\\\n";
@@ -53,18 +54,35 @@ int Menu() {
 
         // Klawiatura
         while (true) {
-            if (_kbhit()) { // jak tego nie mozna to zrobie poprostu cin ale wtedy to -1000000 chinskich social credit
-                char key = _getch();
-                if (key == 'w' && Pozycja > 0) {
-                    Pozycja -= 1;
-                    break;
-                } else if (key == 's' && Pozycja < 2) {
-                    Pozycja += 1;
-                    break;
-                } else if (key == 13) { // 13 = enter
-                    return Pozycja;
-                }
+            SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+            std::cout << "Wpisz (0/1/2/enter)\n";
+            std::cin >> enter;
+            if (enter=="enter") {
+                return Pozycja;
+            } else if (enter=="0") {
+                Pozycja = 0;
+                break;
+            } else if (enter=="1") {
+                Pozycja = 1;
+                break;
+            } else if (enter=="2") {
+                Pozycja = 2;
+                break;
+            } else {
+                break;
             }
+        //    if (_kbhit()) { // jak tego nie mozna to zrobie poprostu cin ale wtedy to -1000000 chinskich social credit
+        //        char key = _getch();
+        //        if (key == 'w' && Pozycja > 0) {
+        //            Pozycja -= 1;
+        //            break;
+        //        } else if (key == 's' && Pozycja < 2) {
+        //            Pozycja += 1;
+        //            break;
+        //        } else if (key == 13) { // 13 = enter
+        //            return Pozycja;
+        //        }
+        //  }
         }
 
         // czyszczenie ekranu
