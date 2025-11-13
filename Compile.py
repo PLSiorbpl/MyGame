@@ -6,7 +6,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 Compiler = "g++"
 Optimization = "-O3"
 Debug = "" # -g
-Open_Game = True
+Open_Game = False
 Last_Compiled = "Last_Compiled.txt"
 Source_Includes = ['-I', 'MyCraft/src']
 Flags = ['-std=c++17', '-static-libstdc++', '-static-libgcc', '-static']
