@@ -15,11 +15,10 @@ HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 // Klasa 1-Rycerz 2-Łucznik 3-Mag
 int Klasa;
-int HP;
-int MaxHP;
-int exp = 0;
+int HP; int MaxHP;
+int exp = 0; int zdobyty_exp;
 int lvl = 0;
-int Mana;
+int Mana; int MaxMana;
 int DEX;
 string Nazwa_Broni;
 int Atak_Broni;
@@ -65,9 +64,9 @@ Menu:
             } else if (wybor=="2") {
                 SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
                 cout << "Wczytywanie Gry:\n";
-                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana DEX Nazwa_Broni Atak_Broni Imie Klasa
+                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa
                 if (plik.is_open()) {
-                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa;
+                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> MaxMana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa;
                     plik.close();
                 } else {
                     cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
@@ -195,20 +194,20 @@ Nowa_Gra:
         cout << endl;
         if (Klasa == 1) {
             cout << Imie << ": Jestem Rycerzem\n";
-            MaxHP = 125; DEX = 5; Mana = 0;
+            MaxHP = 125; DEX = 5; MaxMana = 0;
             break;
         } else if (Klasa == 2) {
             cout << Imie << ": Jestem Lucznikiem\n";
-            MaxHP = 100; DEX = 10; Mana = 0;
+            MaxHP = 100; DEX = 10; MaxMana = 0;
             break;
         } else if (Klasa == 3) {
             cout << Imie << ": Jestem Czarodziejem\n";
-            MaxHP = 75; DEX = 15; Mana = 20;
+            MaxHP = 75; DEX = 15; MaxMana = 20;
             break;
         }
         system("cls");
     }
-    HP = MaxHP;
+    HP = MaxHP; Mana = MaxMana;
     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
     Sleep(2000);
     cout << "Dziadek: W takim razie Wejdz do mojego Domu\n";
@@ -287,9 +286,9 @@ Dom_Dziadka:
             break;
         } else if (wybor == "2") {
             cout << "Zapisywanie Gry\n";
-            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana DEX Nazwa_Broni Atak_Broni Imie Klasa
+            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa
             if (plik.is_open()) {
-                plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" << Atak_Broni << "\n" << Imie << "\n" << Klasa;
+                plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" << Atak_Broni << "\n" << Imie << "\n" << Klasa;
                 plik.close();
             } else {
                 cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
@@ -311,6 +310,7 @@ Przy_Domie_Dziadka:
 
     Przeciwnik[0] = 50; // HP
     Przeciwnik[1] = 5;  // DMG
+    zdobyty_exp = 0;
     srand(time(NULL));
     while (Przeciwnik[0] > 0 && HP > 0) {
         system("cls");
@@ -367,14 +367,14 @@ Przy_Domie_Dziadka:
             if (wybor == "1") {
                 int dmg = (Atak_Broni - 2) + rand() % 3;
                 cout << "Atakujesz Goblina: -" << dmg << "HP\n\n";
-                Przeciwnik[0] -= dmg;
+                Przeciwnik[0] -= dmg; zdobyty_exp += dmg;
             } else if (wybor == "2" || (wybor == "3" && (Klasa == 3 && Mana >= 5))) {
                 if (wybor == "3") {Mana -= 5;}
                 SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 if (40 > szansa) {
                     int dmg = Atak_Broni+2 + rand() % 4;
                     cout << "Atakujesz Goblina: -" << dmg << "HP\n\n";
-                    Przeciwnik[0] -= dmg;
+                    Przeciwnik[0] -= dmg; zdobyty_exp += dmg*2;
                 } else {
                     cout << "Nie Udalo ci sie wykonac Ryzykownego Ataku!\n\n";
                 }
@@ -395,5 +395,23 @@ Przy_Domie_Dziadka:
         }
         Sleep(2000);
     }
+    system("cls");
+    SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    if (HP > 0) {
+        exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+        cout << "Brawo Pokonałes Goblina (LV1)\n";
+        cout << "Zdobyles exp: " << zdobyty_exp << "\n";
+        cout << Imie << " LV: " << lvl << " exp: " << exp << "/100\n";
+    } else {
+        SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+        while (true) {
+            system("cls");
+            cout << "Niestety Przegrales z Goblin (LV1)\n";
+            cout << "Wpisz (1) aby sprubowac jeszcze raz lub (2) aby wyjsc z gry\n";
+            cin >> wybor;
+            if (wybor == "1") {HP = MaxHP; Mana = MaxMana; goto Dom_Dziadka;} else {return 0;}
+        }
+    }
+    system("pause");
     return 0;
 }

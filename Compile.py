@@ -151,7 +151,7 @@ def Link(Destination_exe, PreCompile):
 def main():
     Print_Cyan(f"Max Cores: {os.cpu_count()}")
     Print_Cyan("1 - Yes | 0 - No")
-    Clean = (True if (input("ReCompile All? :") == "1") else False)
+    Clean = True#(True if (input("ReCompile All? :") == "1") else False)
     for i in range(len(Destination)):
         Print_Yellow(f"\n{Destination[i]}")
         Files = Get_All_Files(Clean, Source_Folders[i], Source_Files[i])
