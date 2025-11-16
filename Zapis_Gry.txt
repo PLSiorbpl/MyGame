@@ -1,12 +1,16 @@
-1
-75
-75
+Dom_Dziadka
+100
+100
 0
 0
-20
-20
-15
-Zaczarowany_Patyk
-3
+0
+0
+10
+Luk_z_Strzalami
+4
 Mateusz
-3
+Lucznik
+-5
+
+0 Lasu
+0

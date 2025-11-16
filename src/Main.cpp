@@ -13,19 +13,18 @@ using namespace std;
 
 HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-// Klasa 1-Rycerz 2-Łucznik 3-Mag
-int Klasa;
+// Klasa 1-Rycerz 2-Lucznik 3-Mag
+string Klasa; string Imie;
 int HP; int MaxHP;
-int exp = 0; int zdobyty_exp;
-int lvl = 0;
 int Mana; int MaxMana;
 int DEX;
-string Nazwa_Broni;
-int Atak_Broni;
-string Imie;
-string wybor;
+int lvl = 0; int exp = 0; int zdobyty_exp;
+int Monety = 0; int Zdobyte_Monety;
+string Nazwa_Broni; int Atak_Broni;
+string Quest; int Quest_Postemp;
 int Przeciwnik[2];
-int Lokacja = 0;
+string wybor;
+string Lokacja = "Nowa_Gra";
 
 int main() {
 Menu:
@@ -64,25 +63,20 @@ Menu:
             } else if (wybor=="2") {
                 SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
                 cout << "Wczytywanie Gry:\n";
-                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa
+                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
                 if (plik.is_open()) {
-                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> MaxMana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa;
+                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> MaxMana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa >> Monety >> Quest >> Quest_Postemp;
                     plik.close();
                 } else {
                     cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
                 }
                 cout << "Wczytano Gre\n";
                 Sleep(1000);
-                switch (Lokacja) {
-                case 0:
-                    goto Nowa_Gra;
-                case 1:
-                    goto Dom_Dziadka;
-                case 2:
-                    goto Przy_Domie_Dziadka;
-                default:
-                    goto Nowa_Gra;
-                }
+                if (Lokacja == "Nowa_Gra") { goto Nowa_Gra; }
+                else if (Lokacja == "Dom_Dziadka") { goto Dom_Dziadka; }
+                else if (Lokacja == "Przy_Domie_Dziadka") { goto Przy_Domie_Dziadka; }
+                else if (Lokacja == "Rozdzial_1") { goto Rozdzial_1; }
+                else { goto Nowa_Gra; }
                 system("pause");
                 return 0;
             } else if (wybor=="3") {
@@ -94,7 +88,7 @@ Menu:
         system("cls");
     }
 Nowa_Gra:
-    Lokacja = 0;
+    Lokacja = "Nowa_Gra";
     system("cls");
     SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
     cout << "|--------- Start Twojej Przygody ---------|\n\n";
@@ -184,25 +178,25 @@ Nowa_Gra:
         SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         cout << "1: Rycerz         HP: 125 | DEX: 5\n";
         cout << "2: Lucznik        HP: 100 | DEX: 10\n";
-        cout << "3: Czarodziej     HP: 75  | DEX: 15 | Mana: 20 |\n";
+        cout << "3: Mag            HP: 75  | DEX: 15 | Mana: 20 |\n";
         SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         cout << "\\-------------------------------------------------------------------------------/\n";
         SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         cout << "(1/2/3): ";
-        cin >> Klasa;
+        cin >> wybor;
         SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         cout << endl;
-        if (Klasa == 1) {
+        if (wybor == "1") {
             cout << Imie << ": Jestem Rycerzem\n";
-            MaxHP = 125; DEX = 5; MaxMana = 0;
+            MaxHP = 125; DEX = 5; MaxMana = 0; Klasa = "Rycerz";
             break;
-        } else if (Klasa == 2) {
+        } else if (wybor == "2") {
             cout << Imie << ": Jestem Lucznikiem\n";
-            MaxHP = 100; DEX = 10; MaxMana = 0;
+            MaxHP = 100; DEX = 10; MaxMana = 0; Klasa = "Lucznik";
             break;
-        } else if (Klasa == 3) {
+        } else if (wybor == "3") {
             cout << Imie << ": Jestem Czarodziejem\n";
-            MaxHP = 75; DEX = 15; MaxMana = 20;
+            MaxHP = 75; DEX = 15; MaxMana = 20; Klasa = "Mag";
             break;
         }
         system("cls");
@@ -212,6 +206,7 @@ Nowa_Gra:
     Sleep(2000);
     cout << "Dziadek: W takim razie Wejdz do mojego Domu\n";
     cout << "Dziadek: W skrzyni znajdziesz Bron za ktora bendziesz mi winien 5 zlotych Monet\n";
+    Monety -= 5;
     Sleep(3000);
     system("cls");
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
@@ -251,15 +246,15 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
             SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
             cout << "(Zwykly) ";
             SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-            if (Klasa == 1) {
+            if (Klasa == "Rycerz") {
                 cout << "Drewniany Miecz  |  STR: 5\n";
                 Nazwa_Broni = "Drewniany_Miecz"; Atak_Broni = 5;
                 break;
-            } else if (Klasa == 2) {
+            } else if (Klasa == "Lucznik") {
                 cout << "Luk z Strzalami  |  STR: 4\n";
                 Nazwa_Broni = "Luk_z_Strzalami"; Atak_Broni = 4;
                 break;
-            } else if (Klasa == 3) {
+            } else if (Klasa == "Mag") {
                 cout << "Zaczarowany Patyk  |  STR: 3\n";
                 Nazwa_Broni = "Zaczarowany_Patyk"; Atak_Broni = 3;
                 break;
@@ -268,7 +263,7 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
     }
     Sleep(4000);
 Dom_Dziadka:
-    Lokacja = 1;
+    Lokacja = "Dom_Dziadka";
     while (true) {
         system("cls");
         SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -286,9 +281,10 @@ Dom_Dziadka:
             break;
         } else if (wybor == "2") {
             cout << "Zapisywanie Gry\n";
-            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa
+            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
             if (plik.is_open()) {
-                plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" << Atak_Broni << "\n" << Imie << "\n" << Klasa;
+                plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" 
+                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postemp;
                 plik.close();
             } else {
                 cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
@@ -302,23 +298,23 @@ Dom_Dziadka:
         }
     }
 Przy_Domie_Dziadka:
-    Lokacja = 2;
+    Lokacja = "Przy_Domie_Dziadka";
     system("cls");
     SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
     cout << "Widzisz Goblina ktory atakuje dziadka! Szybko Pomusz Mu!!\n";
     Sleep(3000);
 
-    Przeciwnik[0] = 50; // HP
+    Przeciwnik[0] = 40; // HP
     Przeciwnik[1] = 5;  // DMG
-    zdobyty_exp = 0;
+    zdobyty_exp = 0; Zdobyte_Monety = 0;
     srand(time(NULL));
     while (Przeciwnik[0] > 0 && HP > 0) {
         system("cls");
         while (true) {
             SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            cout << "Goblin (LV1):  ATK: " << Przeciwnik[1]-2 << "/" << Przeciwnik[1] << "  HP: " << Przeciwnik[0] << "/50  [";
+            cout << "Goblin (LV1):  ATK: " << Przeciwnik[1]-2 << "/" << Przeciwnik[1] << "  HP: " << Przeciwnik[0] << "/40  [";
             for (int i = 0; i < 20; i++) {
-                if (i < Przeciwnik[0]*20/50) {
+                if (i < Przeciwnik[0]*20/40) {
                     cout << "#";
                 } else {
                     cout << "-";
@@ -338,7 +334,7 @@ Przy_Domie_Dziadka:
        /`    \      /    `\
       /       '----'       \)" << endl;
             SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
-            cout << "/-------------------------------------------------------------------------------\\\n\n";
+            cout << "/----------------------------------------------------------------------------------------------\\\n\n";
             SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
             cout << Imie << " (LVL" << lvl << "):" << "  STR: " << Atak_Broni << "  HP: " << HP << "/" << MaxHP << " [";
             for (int i = 0; i < 20; i++) {
@@ -349,16 +345,17 @@ Przy_Domie_Dziadka:
                 }
             }
             cout << "]" << "  DEX: " << DEX;
-            if (Klasa == 3) {
+            if (Klasa == "Mag") {
                 cout << "  MP:" << Mana;
             }
+            cout << "  Zdobyty Exp: " << zdobyty_exp << " Zdobyte Monety: " << Zdobyte_Monety;
             SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
             int szansa = rand() % 100 + 1;
-            cout << "\n/-------------------------------------------------------------------------------\\\n\n";
+            cout << "\n\\----------------------------------------------------------------------------------------------/\n\n";
             cout << "Wybierz Atak:     Szansa:  STR:\n";
             cout << "1 Normalny Atak   (100%)   " << Atak_Broni-2 << "/" << Atak_Broni << "\n";
             cout << "2 Ryzykowny Atak  (40%)    " << Atak_Broni+2 << "/" << Atak_Broni+5 << "\n";
-            if (Klasa == 3 && Mana >= 5) {cout << "3 Magiczny Atak:  (100%)   " << Atak_Broni+2 << "/" << Atak_Broni+5 << " Wymaga 5MP\n";
+            if (Klasa == "Mag" && Mana >= 5) {cout << "3 Magiczny Atak:  (100%)   " << Atak_Broni+2 << "/" << Atak_Broni+5 << " Wymaga 5MP\n";
                 szansa = 0;
             }
             cin >> wybor;
@@ -368,7 +365,7 @@ Przy_Domie_Dziadka:
                 int dmg = (Atak_Broni - 2) + rand() % 3;
                 cout << "Atakujesz Goblina: -" << dmg << "HP\n\n";
                 Przeciwnik[0] -= dmg; zdobyty_exp += dmg;
-            } else if (wybor == "2" || (wybor == "3" && (Klasa == 3 && Mana >= 5))) {
+            } else if (wybor == "2" || (wybor == "3" && (Klasa == "Mag" && Mana >= 5))) {
                 if (wybor == "3") {Mana -= 5;}
                 SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 if (40 > szansa) {
@@ -391,6 +388,12 @@ Przy_Domie_Dziadka:
                 cout << "Goblin Atakuje Ciebie: -" << dmg << "HP\n";
                 HP -= dmg;
             }
+            szansa = rand() % 100 + 1;
+            if (35 > szansa) {
+                SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                cout << "\nZdobyles 1 Monete!\n";
+                Zdobyte_Monety++;
+            }
             break;
         }
         Sleep(2000);
@@ -398,10 +401,11 @@ Przy_Domie_Dziadka:
     system("cls");
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     if (HP > 0) {
+        Monety += Zdobyte_Monety;
         exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
-        cout << "Brawo Pokonałes Goblina (LV1)\n";
-        cout << "Zdobyles exp: " << zdobyty_exp << "\n";
-        cout << Imie << " LV: " << lvl << " exp: " << exp << "/100\n";
+        cout << "Brawo Pokonales Goblina (LV1)\n";
+        cout << "Zdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
+        cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
     } else {
         SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
         while (true) {
@@ -412,6 +416,82 @@ Przy_Domie_Dziadka:
             if (wybor == "1") {HP = MaxHP; Mana = MaxMana; goto Dom_Dziadka;} else {return 0;}
         }
     }
-    system("pause");
+    Sleep(7000);
+    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+    cout << R"(              _,-'|
+           ,-'._  |
+ .||,      |####\ |
+\.`',/     \####| |
+= ,. =      |###| |
+/ || \    ,-'\#/,'`.
+  ||     ,'   `,,. `.
+  ,|____,' , ,;' \| |
+ (3|\    _/|/'   _| |
+  ||/,-''  | >-'' _,\\
+  ||'      ==\ ,-'  ,'
+  ||       |  V \ ,|
+  ||       |    |` |
+  ||       |    |   \
+  ||       |    \    \
+  ||       |     |    \
+  ||       |      \_,-'
+  ||       |___,,--")_\
+  ||         |_|   ccc/
+  ||        ccc/
+  ||                   )" << endl;
+    SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+    cout << "\\-------------------------------------------------------------------------------/\n";
+    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+    cout << "Dziadek: Dziekuje ze mnie uratowales... Nie chce nawet myslec co by sie stalo, gdyby cie tu nie bylo\n"; Sleep(3000);
+    cout << "Dziadek: Musze przyznac ze niezle sobie radzisz z walka\n"; Sleep(3000);
+    cout << "Dziadek: Od kilku dni w lesie slychac jakies niepokojace odglosy Handlarze mowili o dziwnych stworach...\n"; Sleep(3000);
+    cout << "Dziadek: Gdybys mogl sprawdzic co tam sie tam dzieje... uznalbym twoj dlug za splacony\n"; Sleep(3000);
+    SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    cout << Imie << ": Nie ma sprawy zajme sie tym\n"; Sleep(3000);
+    Quest = "Idz_do_Lasu"; Quest_Postemp = 0;
+    system("pause"); system("cls");
+    SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+    cout << "----------- Odblokowywujesz Rozdzial 1 -----------\n Powodzenia!!\n"; Sleep(2000);
+Rozdzial_1:
+    Lokacja = "Rozdzial_1";
+    while (true) {
+        system("cls");
+        SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+        cout << "----------- Rozdzial 1 -----------\n";
+        SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+        cout << Imie << " (LVL " << lvl << ") exp: " << exp << "/100 | HP: " << HP << "/" << MaxHP << " | Mana: " << Mana << "/" << MaxMana;
+        cout << "\nKlasa: " << Klasa << " | STR: " << Atak_Broni << " | Bron: " << Nazwa_Broni << " | DEX: " << DEX << " | Zlote Monety: " << Monety;
+        SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+        cout << "\n\nQuesty:\n";
+        cout << "1: " << Quest << " | Postemp: " << Quest_Postemp << "/100%\n";
+        SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
+        cout << "\nWybierz Akcje:\n";
+        cout << "1 Wejdz Do Lasu\n";
+        cout << "2 Wroc Do Dziadka\n";
+        cout << "3 Idz Do Wioski\n";
+        cout << "4 Zapisz Gre\n";
+        cout << "5 Wyjdz z Gry\n";
+        cin >> wybor;
+        if (wybor == "1") {}
+        else if (wybor == "2") {}
+        else if (wybor == "3") {}
+        else if (wybor == "4") {
+            cout << "Zapisywanie Gry\n";
+            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
+            if (plik.is_open()) {
+                plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" 
+                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postemp;
+                plik.close();
+            } else {
+                cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
+                system("pause");
+            }
+            cout << "Zapisano Gre\n";
+            Sleep(2000);}
+        else if (wybor == "5") {
+            cout << "Wychodzenie z Gry\n";
+            return 0;
+        }
+    }
     return 0;
 }
