@@ -1,7 +1,7 @@
-Dom_Dziadka
+Rozdzial_1
+36
 100
-100
-0
+40
 0
 0
 0
@@ -10,7 +10,6 @@ Luk_z_Strzalami
 4
 Mateusz
 Lucznik
--5
-
-0 Lasu
+-1
+Idz_do_Lasu
 0

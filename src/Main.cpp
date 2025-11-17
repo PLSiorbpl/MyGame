@@ -21,9 +21,10 @@ int DEX;
 int lvl = 0; int exp = 0; int zdobyty_exp;
 int Monety = 0; int Zdobyte_Monety;
 string Nazwa_Broni; int Atak_Broni;
-string Quest; int Quest_Postemp;
+string Amulet_1;
+string Quest; int Quest_Postep;
 int Przeciwnik[2];
-string wybor;
+string wybor; int szansa = 0; int szansa_pulapki = 0;
 string Lokacja = "Nowa_Gra";
 
 int main() {
@@ -63,19 +64,23 @@ Menu:
             } else if (wybor=="2") {
                 SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
                 cout << "Wczytywanie Gry:\n";
-                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
+                fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postep
                 if (plik.is_open()) {
-                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> MaxMana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa >> Monety >> Quest >> Quest_Postemp;
+                    plik >> Lokacja >> HP >> MaxHP >> exp >> lvl >> Mana >> MaxMana >> DEX >> Nazwa_Broni >> Atak_Broni >> Imie >> Klasa >> Monety >> Quest >> Quest_Postep;
                     plik.close();
                 } else {
                     cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
                 }
                 cout << "Wczytano Gre\n";
+                srand(time(NULL));
                 Sleep(1000);
                 if (Lokacja == "Nowa_Gra") { goto Nowa_Gra; }
                 else if (Lokacja == "Dom_Dziadka") { goto Dom_Dziadka; }
                 else if (Lokacja == "Przy_Domie_Dziadka") { goto Przy_Domie_Dziadka; }
                 else if (Lokacja == "Rozdzial_1") { goto Rozdzial_1; }
+                else if (Lokacja == "Rozdzial_1") { goto Las; }
+                else if (Lokacja == "Rozdzial_1") { goto Dziadek; }
+                else if (Lokacja == "Rozdzial_1") { goto Wioska; }
                 else { goto Nowa_Gra; }
                 system("pause");
                 return 0;
@@ -281,10 +286,10 @@ Dom_Dziadka:
             break;
         } else if (wybor == "2") {
             cout << "Zapisywanie Gry\n";
-            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
+            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postep
             if (plik.is_open()) {
                 plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" 
-                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postemp;
+                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postep;
                 plik.close();
             } else {
                 cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
@@ -350,7 +355,7 @@ Przy_Domie_Dziadka:
             }
             cout << "  Zdobyty Exp: " << zdobyty_exp << " Zdobyte Monety: " << Zdobyte_Monety;
             SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
-            int szansa = rand() % 100 + 1;
+            szansa = rand() % 100 + 1;
             cout << "\n\\----------------------------------------------------------------------------------------------/\n\n";
             cout << "Wybierz Atak:     Szansa:  STR:\n";
             cout << "1 Normalny Atak   (100%)   " << Atak_Broni-2 << "/" << Atak_Broni << "\n";
@@ -416,7 +421,7 @@ Przy_Domie_Dziadka:
             if (wybor == "1") {HP = MaxHP; Mana = MaxMana; goto Dom_Dziadka;} else {return 0;}
         }
     }
-    Sleep(7000);
+    Sleep(7000); system("cls");
     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
     cout << R"(              _,-'|
            ,-'._  |
@@ -448,7 +453,7 @@ Przy_Domie_Dziadka:
     cout << "Dziadek: Gdybys mogl sprawdzic co tam sie tam dzieje... uznalbym twoj dlug za splacony\n"; Sleep(3000);
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << Imie << ": Nie ma sprawy zajme sie tym\n"; Sleep(3000);
-    Quest = "Idz_do_Lasu"; Quest_Postemp = 0;
+    Quest = "Idz_Glemboko_w_Las"; Quest_Postep = 0;
     system("pause"); system("cls");
     SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
     cout << "----------- Odblokowywujesz Rozdzial 1 -----------\n Powodzenia!!\n"; Sleep(2000);
@@ -463,24 +468,26 @@ Rozdzial_1:
         cout << "\nKlasa: " << Klasa << " | STR: " << Atak_Broni << " | Bron: " << Nazwa_Broni << " | DEX: " << DEX << " | Zlote Monety: " << Monety;
         SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
         cout << "\n\nQuesty:\n";
-        cout << "1: " << Quest << " | Postemp: " << Quest_Postemp << "/100%\n";
+        cout << "1: " << Quest << " | Postep: " << Quest_Postep << "/100%\n";
         SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
         cout << "\nWybierz Akcje:\n";
         cout << "1 Wejdz Do Lasu\n";
         cout << "2 Wroc Do Dziadka\n";
         cout << "3 Idz Do Wioski\n";
+        SetConsoleTextAttribute(hOut, WHITE);
         cout << "4 Zapisz Gre\n";
         cout << "5 Wyjdz z Gry\n";
+        SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         cin >> wybor;
-        if (wybor == "1") {}
-        else if (wybor == "2") {}
-        else if (wybor == "3") {}
+        if (wybor == "1") {goto Las; system("cls");}
+        else if (wybor == "2") {goto Dziadek; system("cls");}
+        else if (wybor == "3") {goto Wioska; system("cls");}
         else if (wybor == "4") {
             cout << "Zapisywanie Gry\n";
-            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postemp
+            fstream plik("Zapis_Gry.txt"); // Miejsce MaxHP exp lvl Mana MaxMana DEX Nazwa_Broni Atak_Broni Imie Klasa Monety Quest Quest_Postep
             if (plik.is_open()) {
                 plik << Lokacja << "\n" << HP << "\n" << MaxHP << "\n" << exp << "\n" << lvl << "\n" << Mana << "\n" << MaxMana << "\n" << DEX << "\n" << Nazwa_Broni << "\n" 
-                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postemp;
+                << Atak_Broni << "\n" << Imie << "\n" << Klasa << "\n" << Monety << "\n" << Quest << "\n" << Quest_Postep;
                 plik.close();
             } else {
                 cout << "Nie Mozna Otworzyc Zapis_Gry.txt Bez Tego Pliku Niekture Funkcje moga nie dzialac!!\n";
@@ -493,5 +500,94 @@ Rozdzial_1:
             return 0;
         }
     }
+Las:
+    Lokacja = "Las";
+    system("cls");
+    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+    cout << "Idziesz Do Lasu...\n"; Sleep(3000);
+    cout << "Drzewa staja sie coraz gestsze a swiatlo powoli zanika pod grubymi konarami.\n"; Sleep(4000);
+    cout << "W powietrzu unosi sie wilgotny zapach mchu, a z oddali dochodzi odglos lamanych galezi...\n"; Sleep(4000);
+    cout << "Po chwili zatrzymujesz sie na niewielkim wzniesieniu, aby zlapac oddech.\n"; Sleep(5000);
+    while (true) {
+        SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
+        system("cls");
+        cout << "Wybierz, dokad chcesz sie udac:\n";
+        cout << "1  W Glab lasu\n";
+        cout << "2  W strone dymu unoszacego sie w oddali\n";
+        cout << "3  Wzdluz waskiej sciezki\n";
+        SetConsoleTextAttribute(hOut, WHITE);
+        cout << "4  Wrocic\n";
+        SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+        cin >> wybor;
+        cout << "\n";
+        if (wybor == "1") {}
+        else if (wybor == "2") {Sleep(2000); goto Las_Dym;}
+        else if (wybor == "3") {}
+        else if (wybor == "4") {cout << "Wracasz z Lasu\n"; Sleep(3000); goto Rozdzial_1;}
+    }
+    Las_Glemboko:
+    Las_Dym:
+        system("cls");
+        szansa_pulapki = 40;
+        SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+        cout << "Idziesz w strone dymu ktory unosi sie ponad drzewami\n"; Sleep(3000);
+        cout << "Po chwili dostrzegasz maly stary dom ukryty miedzy pniami\n"; Sleep(3000);
+        cout << "Drzwi sa uchylone a z srodka dobiega lekki odglos trzaskajacego ognia\n"; Sleep(5000);
+        while (true) {
+            system("cls");
+            SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
+            cout << "Wybierz Akcje:\n";
+            cout << "1  Wejdz Do Domu\n";
+            cout << "2  Wroc\n";
+            cin >> wybor;
+            if (wybor == "1") {
+                system("cls");
+                SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                cout << "Wchodzisz Do Starego Domu...\n"; Sleep(3000);
+                szansa = rand() % 100;
+                SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                if (szansa_pulapki > szansa) {
+                    szansa_pulapki -= 5;
+                    cout << "Niestety w domu byla pulapka ktorej nie zauwazyles\n"; Sleep(3000);
+                    szansa = rand() % 100;
+                    if (50 > szansa && Monety >= 5) {
+                        cout << "Tracisz 5 Zlotych Monet!!\n"; Sleep(3000);
+                        Monety -= 5;
+                        cout << "Twoje Monety: " << Monety << "\n";
+                    } else {
+                        cout << "Tracisz 15 HP!!!\n"; Sleep(3000);
+                        HP -= 15;
+                        cout << "Twoje HP: " << HP << "/" << MaxHP << "\n";
+                        if (HP <= 0 && Amulet_1 != "Amulet_Odrodzenia") {cout << "\nNiestety Zginoles i nie masz Amuletu Odrodzenia\n"; Sleep(3000); return 0;}
+                        else if (HP <= 0 && Amulet_1 == "Amulet_Odrodzenia") {cout << "\nZginoles ale masz Amulet Odrodzenia  Odrodzisz sie z Pelnym HP\n"; Sleep(3000); HP = MaxHP; Amulet_1 = ""; goto Rozdzial_1;}
+                    }
+                } else {
+                    SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                    szansa_pulapki += 10;
+                    szansa = rand() % 100;
+                    cout << "W domu nie bylo pulapki!\n"; Sleep(3000);
+                    if (50 > szansa) {
+                        cout << "Przy Kominku Lezy Upieczony Kurczak ktory uleczy ci 25 HP i 10 Many!\n"; Sleep(3000);
+                        HP += 25; Mana += 10;
+                        if (HP > MaxHP) {HP = MaxHP;}
+                        if (Mana > MaxMana) {Mana = MaxMana;}
+                        cout << "Twoje HP: " << HP << "/" << MaxHP << " Mana: " << Mana << "/" << MaxMana << "\n";
+                    } else {
+                        cout << "Na stole lezy sakiewka z 5 Zlotymi Monetami\n"; Sleep(3000);
+                        Monety += 5;
+                        cout << "Twoje Monety: " << Monety << "\n";
+                    }
+                }
+                Sleep(4000);
+            }
+            else if (wybor == "2") {cout << "Wracasz sie\n"; Sleep(2000); goto Las;}
+        }
+    Las_Sciezka:
+Dziadek:
+    Lokacja = "Dziadek";
+    cout << "Idziesz Do Domu Dziadka\n";
+Wioska:
+    Lokacja = "Wioska";
+    cout << "Idziesz Do Wioski\n";
     return 0;
 }
