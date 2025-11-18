@@ -13,7 +13,7 @@ using namespace std;
 
 HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-// Klasa 1-Rycerz 2-Lucznik 3-Mag
+// Rycerz | Lucznik | Mag
 string Klasa; string Imie;
 int HP; int MaxHP;
 int Mana; int MaxMana;
@@ -23,7 +23,8 @@ int Monety = 0; int Zdobyte_Monety;
 string Nazwa_Broni; int Atak_Broni;
 string Amulet_1;
 string Quest; int Quest_Postep;
-int Przeciwnik[2];
+// HP | MaxHP | STR_min | STR_max
+int Przeciwnik[4]; string Przeciwnik_Nazwa; string Ascii;
 string wybor; int szansa = 0; int szansa_pulapki = 0;
 string Lokacja = "Nowa_Gra";
 
@@ -127,20 +128,14 @@ Nowa_Gra:
     cout << "\\-------------------------------------------------------------------------------/\n";
     Sleep(2000);
     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
-    cout << "Dziadek: Witaj mlody podrozniku czego szukasz?\n";
-    Sleep(3000);
+    cout << "Dziadek: Witaj mlody podrozniku czego szukasz?\n"; Sleep(3000);
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-    cout << "?: Podruzuje po swiecie i szukam przygod!\n";
-    Sleep(3000);
-    cout << "?: W Mojej ostatniej Podrozy zgubilem swoja Bron\n";
-    Sleep(3000);
-    cout << "?: Czy mialbys dla mnie bron ktora moge pozycyc?\n";
-    Sleep(3000);
+    cout << "?: Podruzuje po swiecie i szukam przygod!\n"; Sleep(3000);
+    cout << "?: W Mojej ostatniej Podrozy zgubilem swoja Bron\n"; Sleep(3000);
+    cout << "?: Czy mialbys dla mnie bron ktora moge pozycyc?\n"; Sleep(3000);
     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
-    cout << "Dziadek: Mysle ze mam cos dla ciebie w domu\n";
-    Sleep(3000);
-    cout << "Dziadek: Ale najpierw powiedz mi jak sie Nazywasz\n";
-    Sleep(3000);
+    cout << "Dziadek: Mysle ze mam cos dla ciebie w domu\n"; Sleep(3000);
+    cout << "Dziadek: Ale najpierw powiedz mi jak sie Nazywasz\n"; Sleep(3000);
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "                  (Wpisz Bez Spacji!!)\n";
     cout << "Jasne Nazywam sie: ";
@@ -173,8 +168,7 @@ Nowa_Gra:
         SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         cout << "\\-------------------------------------------------------------------------------/\n";
         SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
-        cout << "Dziadek: Swietnie " << Imie << "\n";
-        Sleep(3000);
+        cout << "Dziadek: Swietnie " << Imie << "\n"; Sleep(3000);
         cout << "Dziadek: Powiedz mi jeszcze kim wogule jestes\n\n";
         SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         cout << "Wybierz kim Jestes:\n\n";
@@ -209,10 +203,9 @@ Nowa_Gra:
     HP = MaxHP; Mana = MaxMana;
     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
     Sleep(2000);
-    cout << "Dziadek: W takim razie Wejdz do mojego Domu\n";
-    cout << "Dziadek: W skrzyni znajdziesz Bron za ktora bendziesz mi winien 5 zlotych Monet\n";
+    cout << "Dziadek: W takim razie Wejdz do mojego Domu\n"; Sleep(2000);
+    cout << "Dziadek: W skrzyni znajdziesz Bron za ktora bendziesz mi winien 5 zlotych Monet\n"; Sleep(3000);
     Monety -= 5;
-    Sleep(3000);
     system("cls");
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "Wchodzisz do domu Dziadka:\n";
@@ -246,8 +239,7 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
         cin >> wybor;
         if (wybor == "E" || wybor == "e") {
             Sleep(1000);
-            cout << "Znalazles w Skrzyni:\n";
-            Sleep(2000);
+            cout << "Znalazles w Skrzyni:\n"; Sleep(2000);
             SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
             cout << "(Zwykly) ";
             SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -306,20 +298,21 @@ Przy_Domie_Dziadka:
     Lokacja = "Przy_Domie_Dziadka";
     system("cls");
     SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
-    cout << "Widzisz Goblina ktory atakuje dziadka! Szybko Pomusz Mu!!\n";
-    Sleep(3000);
+    cout << "Widzisz Goblina ktory atakuje dziadka! Szybko Pomusz Mu!!\n"; Sleep(3000);
 
-    Przeciwnik[0] = 40; // HP
-    Przeciwnik[1] = 5;  // DMG
+    Przeciwnik[0] = 35; // HP
+    Przeciwnik[1] = 35; // MaxHP
+    Przeciwnik[2] = 1; Przeciwnik[3] = 3; // STR: min-max
+    Przeciwnik_Nazwa = "Goblin (LV 1)";
     zdobyty_exp = 0; Zdobyte_Monety = 0;
     srand(time(NULL));
     while (Przeciwnik[0] > 0 && HP > 0) {
         system("cls");
         while (true) {
             SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            cout << "Goblin (LV1):  ATK: " << Przeciwnik[1]-2 << "/" << Przeciwnik[1] << "  HP: " << Przeciwnik[0] << "/40  [";
+            cout << Przeciwnik_Nazwa << ":  ATK: " << Przeciwnik[2] << "/" << Przeciwnik[3] << "  HP: " << Przeciwnik[0] << "/" << Przeciwnik[1] << "  [";
             for (int i = 0; i < 20; i++) {
-                if (i < Przeciwnik[0]*20/40) {
+                if (i < Przeciwnik[0]*20/Przeciwnik[1]) {
                     cout << "#";
                 } else {
                     cout << "-";
@@ -355,27 +348,27 @@ Przy_Domie_Dziadka:
             }
             cout << "  Zdobyty Exp: " << zdobyty_exp << " Zdobyte Monety: " << Zdobyte_Monety;
             SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
-            szansa = rand() % 100 + 1;
             cout << "\n\\----------------------------------------------------------------------------------------------/\n\n";
             cout << "Wybierz Atak:     Szansa:  STR:\n";
             cout << "1 Normalny Atak   (100%)   " << Atak_Broni-2 << "/" << Atak_Broni << "\n";
             cout << "2 Ryzykowny Atak  (40%)    " << Atak_Broni+2 << "/" << Atak_Broni+5 << "\n";
-            if (Klasa == "Mag" && Mana >= 5) {cout << "3 Magiczny Atak:  (100%)   " << Atak_Broni+2 << "/" << Atak_Broni+5 << " Wymaga 5MP\n";
-                szansa = 0;
+            if (Klasa == "Mag" && Mana >= 5) {
+                cout << "3 Magiczny Atak:  (100%)   " << Atak_Broni+2 << "/" << Atak_Broni+5 << " Wymaga 5MP\n";
             }
             cin >> wybor;
             cout << endl;
             SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
             if (wybor == "1") {
-                int dmg = (Atak_Broni - 2) + rand() % 3;
-                cout << "Atakujesz Goblina: -" << dmg << "HP\n\n";
+                int dmg = Atak_Broni - 2 + rand() % 3;
+                cout << "Atakujesz "<< Przeciwnik_Nazwa << ": -" << dmg << "HP\n\n";
                 Przeciwnik[0] -= dmg; zdobyty_exp += dmg;
             } else if (wybor == "2" || (wybor == "3" && (Klasa == "Mag" && Mana >= 5))) {
-                if (wybor == "3") {Mana -= 5;}
+                szansa = rand() % 100 + 1;
+                if (wybor == "3") {Mana -= 5; szansa = 0;}
                 SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 if (40 > szansa) {
                     int dmg = Atak_Broni+2 + rand() % 4;
-                    cout << "Atakujesz Goblina: -" << dmg << "HP\n\n";
+                    cout << "Atakujesz "<< Przeciwnik_Nazwa << ": -" << dmg << "HP\n\n";
                     Przeciwnik[0] -= dmg; zdobyty_exp += dmg*2;
                 } else {
                     cout << "Nie Udalo ci sie wykonac Ryzykownego Ataku!\n\n";
@@ -384,13 +377,13 @@ Przy_Domie_Dziadka:
                 break;
             }
             SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            int dmg = Przeciwnik[1] - 2 + rand() % 3;
+            int dmg = Przeciwnik[2] + rand() % (Przeciwnik[3] - Przeciwnik[2] + 1);
             szansa = rand() % 100 + 1;
             if (DEX > szansa) {
                 dmg = 0;
-                cout << "Obroniles Atak Goblina!\n";
+                cout << "Obroniles Atak " << Przeciwnik_Nazwa << "!\n";
             } else {
-                cout << "Goblin Atakuje Ciebie: -" << dmg << "HP\n";
+                cout << Przeciwnik_Nazwa << " Atakuje Ciebie: -" << dmg << "HP\n";
                 HP -= dmg;
             }
             szansa = rand() % 100 + 1;
@@ -408,15 +401,15 @@ Przy_Domie_Dziadka:
     if (HP > 0) {
         Monety += Zdobyte_Monety;
         exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
-        cout << "Brawo Pokonales Goblina (LV1)\n";
-        cout << "Zdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
+        cout << "Brawo Pokonales " << Przeciwnik_Nazwa;
+        cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
         cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
     } else {
         SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
         while (true) {
             system("cls");
-            cout << "Niestety Przegrales z Goblin (LV1)\n";
-            cout << "Wpisz (1) aby sprubowac jeszcze raz lub (2) aby wyjsc z gry\n";
+            cout << "Niestety Przegrales z " << Przeciwnik_Nazwa;
+            cout << "\nWpisz (1) aby sprubowac jeszcze raz lub (2) aby wyjsc z gry\n";
             cin >> wybor;
             if (wybor == "1") {HP = MaxHP; Mana = MaxMana; goto Dom_Dziadka;} else {return 0;}
         }
@@ -508,6 +501,7 @@ Las:
     cout << "Drzewa staja sie coraz gestsze a swiatlo powoli zanika pod grubymi konarami.\n"; Sleep(4000);
     cout << "W powietrzu unosi sie wilgotny zapach mchu, a z oddali dochodzi odglos lamanych galezi...\n"; Sleep(4000);
     cout << "Po chwili zatrzymujesz sie na niewielkim wzniesieniu, aby zlapac oddech.\n"; Sleep(5000);
+    Las_Skip:
     while (true) {
         SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
         system("cls");
@@ -520,9 +514,9 @@ Las:
         SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         cin >> wybor;
         cout << "\n";
-        if (wybor == "1") {}
+        if (wybor == "1") {Sleep(2000); goto Las_Glemboko;}
         else if (wybor == "2") {Sleep(2000); goto Las_Dym;}
-        else if (wybor == "3") {}
+        else if (wybor == "3") {Sleep(2000); goto Las_Sciezka;}
         else if (wybor == "4") {cout << "Wracasz z Lasu\n"; Sleep(3000); goto Rozdzial_1;}
     }
     Las_Glemboko:
@@ -558,7 +552,7 @@ Las:
                         cout << "Tracisz 15 HP!!!\n"; Sleep(3000);
                         HP -= 15;
                         cout << "Twoje HP: " << HP << "/" << MaxHP << "\n";
-                        if (HP <= 0 && Amulet_1 != "Amulet_Odrodzenia") {cout << "\nNiestety Zginoles i nie masz Amuletu Odrodzenia\n"; Sleep(3000); return 0;}
+                        if (HP <= 0 && Amulet_1 != "Amulet_Odrodzenia") {cout << "\nNiestety Zginoles i nie masz Amuletu Odrodzenia - Umierasz\n"; Sleep(3000); return 0;}
                         else if (HP <= 0 && Amulet_1 == "Amulet_Odrodzenia") {cout << "\nZginoles ale masz Amulet Odrodzenia  Odrodzisz sie z Pelnym HP\n"; Sleep(3000); HP = MaxHP; Amulet_1 = ""; goto Rozdzial_1;}
                     }
                 } else {
@@ -567,8 +561,8 @@ Las:
                     szansa = rand() % 100;
                     cout << "W domu nie bylo pulapki!\n"; Sleep(3000);
                     if (50 > szansa) {
-                        cout << "Przy Kominku Lezy Upieczony Kurczak ktory uleczy ci 25 HP i 10 Many!\n"; Sleep(3000);
-                        HP += 25; Mana += 10;
+                        cout << "Przy Kominku Lezy Upieczony Kurczak ktory uleczy ci 20 HP i 5 Many!\n"; Sleep(3000);
+                        HP += 20; Mana += 5;
                         if (HP > MaxHP) {HP = MaxHP;}
                         if (Mana > MaxMana) {Mana = MaxMana;}
                         cout << "Twoje HP: " << HP << "/" << MaxHP << " Mana: " << Mana << "/" << MaxMana << "\n";
@@ -580,9 +574,163 @@ Las:
                 }
                 Sleep(4000);
             }
-            else if (wybor == "2") {cout << "Wracasz sie\n"; Sleep(2000); goto Las;}
+            else if (wybor == "2") {cout << "Wracasz sie\n"; Sleep(2000); goto Las_Skip;}
         }
     Las_Sciezka:
+        system("cls");
+        SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+        cout << "Idziesz wzdluz krentej sciezki...\n"; Sleep(3000);
+        cout << "Slyszysz dziwne dzwienki dobiegajace z za drzew\n"; Sleep(3000);
+        cout << "Czujesz ze ktos cie obserwuje...\n"; Sleep (4000);
+        system("cls");
+        SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+        szansa = rand() % 100;
+        zdobyty_exp = 0; Zdobyte_Monety = 0;
+        if (60 > szansa) {
+            Przeciwnik[0] = 25; // HP
+            Przeciwnik[1] = 25; // MaxHP
+            Przeciwnik[2] = 2; Przeciwnik[3] = 2; // STR: min-max
+            Przeciwnik_Nazwa = "Wilk (LV 1)";
+            Ascii = R"(     _                  _
+    | '-.            .-' |
+    | -. '..\\,.//,.' .- |
+    |   \  \\\||///  /   |
+   /|    )M\/%%%%/\/(  . |\
+  (/\  MM\/%/\||/%\\/MM  /\)
+  (//M   \%\\\%%//%//   M\\)
+(// M________ /\ ________M \\)
+ (// M\ \(',)|  |(',)/ /M \\) \\\\  
+  (\\ M\.  /,\\//,\  ./M //)
+    / MMmm( \\||// )mmMM \  \\
+     // MMM\\\||///MMM \\ \\
+      \//''\)/||\(/''\\/ \\
+      mrf\\( \oo/ )\\\/\
+           \'-..-'\/\\
+              \\/ \\)";
+            cout << "Nagle z krzakow wyskakuje Wilk!\n"; Sleep(1000);
+            cout << "Rzuca sie na ciebie musisz walczyc! Na szczescie nie wyglada na bardzo silnego!\n"; Sleep(3000);
+        } else {
+            Przeciwnik[0] = 35; // HP
+            Przeciwnik[1] = 35; // MaxHP
+            Przeciwnik[2] = 1; Przeciwnik[3] = 3; // STR: min-max
+            Przeciwnik_Nazwa = "Goblin (LV 1)";
+            Ascii = R"(             ,      ,   
+            /(.-""-.)\
+        |\  \/      \/  /|
+        | \ / =.  .= \ / |
+        \( \   o\/o   / )/
+         \_, '-/  \-' ,_/
+           /   \__/   \
+           \ \__/\__/ /
+         ___\ \|--|/ /___
+       /`    \      /    `\
+      /       '----'       \)";
+            cout << "Slyszysz cichy chichotliwy smiech dochodzacy zza drzewa...\n"; Sleep(3000);
+            cout << "Nagle goblin wyskakuje z ukrycia i proboje cie zaatakowac!\n"; Sleep(1000);
+            cout << "Przygotuj sie do walki!\n"; Sleep(3000);
+        }
+        while (Przeciwnik[0] > 0 && HP > 0) {
+            system("cls");
+            srand(time(NULL));
+            while (true) {
+                SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                cout << Przeciwnik_Nazwa << ":  ATK: " << Przeciwnik[2] << "/" << Przeciwnik[3] << "  HP: " << Przeciwnik[0] << "/" << Przeciwnik[1] << "  [";
+                for (int i = 0; i < 20; i++) {
+                    if (i < Przeciwnik[0]*20/Przeciwnik[1]) {
+                        cout << "#";
+                    } else {
+                        cout << "-";
+                    }
+                }
+                cout << "]\n";
+                SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                cout << Ascii << endl;
+                SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+                cout << "/----------------------------------------------------------------------------------------------\\\n\n";
+                SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                cout << Imie << " (LVL" << lvl << "):" << "  STR: " << Atak_Broni << "  HP: " << HP << "/" << MaxHP << " [";
+                for (int i = 0; i < 20; i++) {
+                    if (i < HP*20/MaxHP) {
+                        cout << "#";
+                    } else {
+                        cout << "-";
+                    }
+                }
+                cout << "]" << "  DEX: " << DEX;
+                if (Klasa == "Mag") {
+                    cout << "  MP:" << Mana;
+                }
+                cout << "  Zdobyty Exp: " << zdobyty_exp << " Zdobyte Monety: " << Zdobyte_Monety;
+                SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+                cout << "\n\\----------------------------------------------------------------------------------------------/\n\n";
+                cout << "Wybierz Atak:     Szansa:  STR:\n";
+                cout << "1 Normalny Atak   (100%)   " << Atak_Broni-2 << "/" << Atak_Broni << "\n";
+                cout << "2 Ryzykowny Atak  (40%)    " << Atak_Broni+2 << "/" << Atak_Broni+5 << "\n";
+                if (Klasa == "Mag" && Mana >= 5) {
+                    cout << "3 Magiczny Atak:  (100%)   " << Atak_Broni+2 << "/" << Atak_Broni+5 << " Wymaga 5MP\n";
+                }
+                cin >> wybor;
+                cout << endl;
+                SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                if (wybor == "1") {
+                    int dmg = Atak_Broni - 2 + rand() % 3;
+                    cout << "Atakujesz "<< Przeciwnik_Nazwa << ": -" << dmg << "HP\n\n";
+                    Przeciwnik[0] -= dmg; zdobyty_exp += dmg;
+                } else if (wybor == "2" || (wybor == "3" && (Klasa == "Mag" && Mana >= 5))) {
+                    szansa = rand() % 100 + 1;
+                    if (wybor == "3") {Mana -= 5; szansa = 0;}
+                    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                    if (40 > szansa) {
+                        int dmg = Atak_Broni+2 + rand() % 4;
+                        cout << "Atakujesz "<< Przeciwnik_Nazwa << ": -" << dmg << "HP\n\n";
+                        Przeciwnik[0] -= dmg; zdobyty_exp += dmg*2;
+                    } else {
+                        cout << "Nie Udalo ci sie wykonac Ryzykownego Ataku!\n\n";
+                    }
+                } else {
+                    break;
+                }
+                SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                int dmg = Przeciwnik[2] + rand() % (Przeciwnik[3] - Przeciwnik[2] + 1);
+                szansa = rand() % 100 + 1;
+                if (DEX > szansa) {
+                    dmg = 0;
+                    cout << "Obroniles Atak " << Przeciwnik_Nazwa << "!\n";
+                } else {
+                    cout << Przeciwnik_Nazwa << " Atakuje Ciebie: -" << dmg << "HP\n";
+                    HP -= dmg;
+                }
+                szansa = rand() % 100 + 1;
+                if (35 > szansa) {
+                    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                    cout << "\nZdobyles 1 Monete!\n";
+                    Zdobyte_Monety++;
+                }
+                break;
+            }
+            Sleep(2000);
+        }
+        system("cls");
+        SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+        if (HP > 0) {
+            Monety += Zdobyte_Monety;
+            exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+            cout << "Brawo Pokonales " << Przeciwnik_Nazwa;
+            cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
+            cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
+            Sleep(5000);
+            system("cls");
+            cout << "Postanawiasz wrocic i odpoczanc po przeciwniku\n"; Sleep(2000);
+            goto Las_Skip;
+        } else {
+            SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            while (true) {
+                system("cls");
+                cout << "Niestety Przegrales z " << Przeciwnik_Nazwa;
+                if (HP <= 0 && Amulet_1 != "Amulet_Odrodzenia") {cout << "\nNiestety nie masz Amuletu Odrodzenia - Umierasz\n"; Sleep(3000); return 0;}
+                else if (HP <= 0 && Amulet_1 == "Amulet_Odrodzenia") {cout << "\nZginoles ale masz Amulet Odrodzenia - Odrodzisz sie z Pelnym HP\n"; Sleep(3000); HP = MaxHP; Amulet_1 = ""; goto Rozdzial_1;}
+            }
+        }
 Dziadek:
     Lokacja = "Dziadek";
     cout << "Idziesz Do Domu Dziadka\n";
