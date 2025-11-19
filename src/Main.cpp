@@ -461,7 +461,7 @@ Rozdzial_1:
         cout << "\nKlasa: " << Klasa << " | STR: " << Atak_Broni << " | Bron: " << Nazwa_Broni << " | DEX: " << DEX << " | Zlote Monety: " << Monety;
         SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
         cout << "\n\nQuesty:\n";
-        cout << "1: " << Quest << " | Postep: " << Quest_Postep << "/100%\n";
+        cout << "1: " << Quest << " | Postep: " << Quest_Postep << "%/100%\n";
         SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
         cout << "\nWybierz Akcje:\n";
         cout << "1 Wejdz Do Lasu\n";
@@ -520,6 +520,57 @@ Las:
         else if (wybor == "4") {cout << "Wracasz z Lasu\n"; Sleep(3000); goto Rozdzial_1;}
     }
     Las_Glemboko:
+        system("cls");
+        SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+        if (Quest == "Idz_Glemboko_w_Las" && Quest_Postep != 100) {
+            cout << "Idziesz glebiej w las twoje serce bije szybciej...\n"; Sleep(4000);
+            cout << "W oddali slyszysz chichotliwe smiechy i stukot jakby cos sie poruszalo miedzy drzewami\n"; Sleep(4000);
+            cout << "Podazasz ostroznie za dzwiekami...\n"; Sleep(4000);
+            cout << "Zauwazasz wielki oboz goblinow i widzisz jak Gobliny gdzies ida\n"; Sleep(4000);
+            cout << R"(        ______
+       /     /\
+      /     /  \
+     /_____/----\_    (  
+    "     "          ).  
+   _ ___          o (:') o   
+  (@))_))        o ~/~~\~ o   
+                  o  o  o)" << endl;
+            cout << "Po chwili w obozie nie ma juz nikogo i zastanawiasz sie czy tam nie wejsc\n"; Sleep(5000);
+            while (true) {
+                system("cls");
+                cout << R"(        ______
+       /     /\
+      /     /  \
+     /_____/----\_    (  
+    "     "          ).  
+   _ ___          o (:') o   
+  (@))_))        o ~/~~\~ o   
+                  o  o  o)" << endl;
+                cout << "1  Wejdz do Obozu\n";
+                cout << "2  Zawroc sie\n";
+                cin >> wybor;
+                if (wybor == "1") {
+                    system("cls");
+                    cout << "Wchodzisz do Obozu oglandajac sie za siebie\n"; Sleep(3000);
+                    cout << "Na ognisku widzisz jeszcze Jedzenie i postanawiasz je zjesc (+20 HP, +5 MP)\n"; Sleep(4000);
+                    HP += 20; Mana += 5;
+                    if (HP > MaxHP) {HP = MaxHP;}
+                    if (Mana > MaxMana) {Mana = MaxMana;}
+                    SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                    cout << "Twoje HP: " << HP << "/" << MaxHP << " Mana: " << Mana << "/" << MaxMana << "\n";
+                    SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                    cout << "W jednym z namiotow widzisz sakiewke w ktorej jest 5 Zlotych Monet!\n"; Sleep(4000);
+                    cout << "Zaraz obok widzisz miecze i luki Goblinow lecz z oddali slychac glosy...\n"; Sleep(4000);
+                    cout << "Postanawiasz wrocic i powiedziec o tym dziadkowi\n"; Sleep(5000);
+                    SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+                    cout << "-- Powiedz Dziadkowi co zobaczyles w Lesie --\n"; Sleep(4000);
+                    Quest_Postep = 100;
+                    goto Las_Skip;
+                } else { goto Las_Skip;}
+            }
+        } else {
+            goto Las_Skip;
+        }
     Las_Dym:
         system("cls");
         szansa_pulapki = 40;
@@ -530,6 +581,12 @@ Las:
         while (true) {
             system("cls");
             SetConsoleTextAttribute(hOut, WHITE | FOREGROUND_INTENSITY);
+            cout << R"(  ____||____
+ ///////////\
+///////////  \
+|    _    |  |
+|[] | | []|[]|
+|   | |   |  |)" << endl;
             cout << "Wybierz Akcje:\n";
             cout << "1  Wejdz Do Domu\n";
             cout << "2  Wroc\n";
