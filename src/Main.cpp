@@ -71,13 +71,12 @@ Menu:
                 cout << "Wczytano Gre\n";
                 srand(time(NULL));
                 Sleep(1000);
+                goto Skip;
                 if (Lokacja == "Nowa_Gra") { goto Nowa_Gra; }
                 else if (Lokacja == "Dom_Dziadka") { goto Dom_Dziadka; }
                 else if (Lokacja == "Przy_Domie_Dziadka") { goto Przy_Domie_Dziadka; }
                 else if (Lokacja == "Rozdzial_1") { goto Rozdzial_1; }
-                else if (Lokacja == "Rozdzial_1") { goto Las; }
-                else if (Lokacja == "Rozdzial_1") { goto Dziadek; }
-                else if (Lokacja == "Rozdzial_1") { goto Wioska; }
+                else if (Lokacja == "Rozdzial_4") { goto Rozdzial_4; }
                 else { goto Nowa_Gra; }
                 system("pause");
                 return 0;
@@ -383,7 +382,7 @@ Przy_Domie_Dziadka:
                 HP -= dmg;
             }
             szansa = rand() % 100 + 1;
-            if (40 > szansa) {
+            if (50 > szansa) {
                 SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 cout << "\nZdobyles 1 Monete!\n";
                 Zdobyte_Monety++;
@@ -396,13 +395,14 @@ Przy_Domie_Dziadka:
     SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     if (HP > 0) {
         Monety += Zdobyte_Monety;
-        exp += zdobyty_exp; lvl += exp/100;
-        int zdobyty_lvl = exp/100; exp = exp%100;
+        int level_przed = lvl;
+        exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+        int zdobyty_lvl = lvl - level_przed;
         cout << "Brawo Pokonales " << Przeciwnik_Nazwa;
         cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
         cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
         MaxHP += 10*zdobyty_lvl; if (Klasa == "Mag") {MaxMana += 5*zdobyty_lvl;} DEX += zdobyty_lvl;
-        cout << "Max HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
+        cout << "\nMax HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
     } else {
         SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
         while (true) {
@@ -469,6 +469,10 @@ Rozdzial_1:
         cout << "1 Wejdz Do Lasu\n";
         cout << "2 Wroc Do Dziadka\n";
         cout << "3 Idz Do Wioski\n";
+        if (Quest == "Idz_do_swiantyni_goblinow__i_ich_pokonaj") {
+            SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+            cout << "6  Idz do Swiantyni Goblinow   (nie ma odwrotu)\n";
+        }
         SetConsoleTextAttribute(hOut, WHITE);
         cout << "4 Zapisz Gre\n";
         cout << "5 Wyjdz z Gry\n";
@@ -493,6 +497,8 @@ Rozdzial_1:
         else if (wybor == "5") {
             cout << "Wychodzenie z Gry\n";
             return 0;
+        } else if (wybor == "6" && Quest == "Idz_do_swiantyni_goblinow__i_ich_pokonaj") {
+            goto Rozdzial_4;
         }
     }
 Las:
@@ -599,7 +605,7 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
             cout << "Najpierw powiedz o tym dziadkowi!\n"; Sleep(4000);
             goto Las_Skip;
         } else if (Quest == "Idz_do_obozu_goblinow_i_dowiedz_sie_dlaczego_dziadek_byl_na_kartce") {
-            if (lvl <= 5) {
+            if (lvl >= 5) {
                 cout << "Powoli idzesz w strone obozu goblinow...\n"; Sleep(3000);
                 cout << "Zblizajanc sie Slyszysz dzwienki goblinow\n"; Sleep(3000);
                 cout << "W obozie widzisz 2 dobrze uzbrojonych gobliny i ich wodza..\n"; Sleep(4000);
@@ -621,7 +627,7 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
                     cin >> wybor;
                     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                     if (wybor == "1") {
-                        cout << "Wychodzisz powoli z krzakow podnosisz rece w pokojowym geście...\n"; Sleep(3000);
+                        cout << "Wychodzisz powoli z krzakow podnosisz rece w pokojowym gescie...\n"; Sleep(3000);
                         cout << "Gobliny odwracaja sie w twoja strone zaskoczoni twoim zachowaniem\n"; Sleep(3000);
                         cout << "Ich wodz patrzy na ciebie podejrzliwie.\n"; Sleep(3000);
                         SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
@@ -683,7 +689,8 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
             cout << Ascii << endl;
             cout << "Poddaj sie jak chcesz zyc!!\n"; Sleep(4000);
             SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-            cout << Imie << "Nie poddam sie bez walki!\n"; Sleep(4000);
+            cout << Imie << ": Nie poddam sie bez walki!\n"; Sleep(4000);
+            // Walka przed bosem (2 gobliny)
             while (Przeciwnik[4] > 0) {
                 while (Przeciwnik[0] > 0 && HP > 0) {
                     system("cls");
@@ -758,7 +765,7 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
                             HP -= dmg;
                         }
                         szansa = rand() % 100 + 1;
-                        if (40 > szansa) {
+                        if (50 > szansa) {
                             SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                             cout << "\nZdobyles 1 Monete!\n";
                             Zdobyte_Monety++;
@@ -791,6 +798,33 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
             SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
             cout << "Jeszcze musisz pokonac Kapitana Goblinow\n"; Sleep(3000);
             cout << "Ale uwaga on potrafi unikac twoje ataki (20%)!\n"; Sleep(4000);
+            // Walka z bosem tu
+            Przeciwnik[0] = 50;
+            Przeciwnik[1] = 50; // MaxHP
+            Przeciwnik[2] = 5; Przeciwnik[3] = 5; // STR: min-max
+            Przeciwnik_Nazwa = "Kapitan Goblinow (LVL 5)";
+            Ascii = R"(                           __.--|~|--.__                              ,,;/;
+                         /~     | |    ;~\                          ,;;;/;;'
+                        /|      | |    ;~\\                      ,;;;;/;;;'
+                       |/|      \_/   ;;;|\                    ,;;;;/;;;;'
+                       |/ \          ;;;/  )                 ,;;;;/;;;;;'
+                   ___ | ______     ;_____ |___....__      ,;;;;/;;;;;'
+             ___.-~ \\(| \  \.\ \__/ /./ /:|)~   ~   \   ,;;;;/;;;;;'
+         /~~~    ~\    |  ~-.     |   .-~: |//  _.-~~--,;;;;/;;;;;'
+        (.-~___     \.'|    | /-.__.-\|::::| //~     ,;;;;/;;;;;'
+        /      ~~--._ \|   /          `\:: |/      ,;;;;/;;;;;'
+     .-|             ~~|   |  /V""""V\ |:  |     ,;;;;/;;;;;' \
+    /                   \  |  ~`^~~^'~ |  /    ,;;;;/;;;;;'    ;
+   (        \             \|`\._____./'|/    ,;;;;/;;;;;'      '\
+  / \        \                             ,;;;;/;;;;;'     /    |
+ |            |                          ,;;;;/;;;;;'      |     |
+|`-._          |                       ,;;;;/;;;;;'              \
+|             /                      ,;;;;/;;;;;'  \              \__________
+(             )                 |  ,;;;;/;;;;;'      |        _.--~
+ \          \/ \              ,  ;;;;;/;;;;;'       /(     .-~_..--~~~~~~~~~~
+ \__         '  `       ,     ,;;;;;/;;;;;'    .   /  \   / /~
+ /          \'  |`._______ ,;;;;;;/;;;;;;'    /   :    \/'/'       /|_/|   ``|
+| _.-~~~~-._ |   \ __   .,;;;;;;/;;;;;;' ~~~~'   .'    | |       /~ (/\/    ||)";
             while (Przeciwnik[0] > 0 && HP > 0) {
                 system("cls");
                 srand(time(NULL));
@@ -874,7 +908,7 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
                         HP -= dmg;
                     }
                     szansa = rand() % 100 + 1;
-                    if (40 > szansa) {
+                    if (50 > szansa) {
                         SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                         cout << "\nZdobyles 1 Monete!\n";
                         Zdobyte_Monety++;
@@ -883,19 +917,58 @@ jgs \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_)";
                 }
                 Sleep(2000);
             }
+            system("cls");
+            Skip:
             if (HP > 0) {
                 Monety += Zdobyte_Monety;
-                exp += zdobyty_exp; lvl += exp/100;
-                int zdobyty_lvl = exp/100; exp = exp%100;
+                int level_przed = lvl;
+                exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+                int zdobyty_lvl = lvl - level_przed;
                 cout << "Brawo Pokonales " << Przeciwnik_Nazwa;
                 cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
                 cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
                 MaxHP += 10*zdobyty_lvl; if (Klasa == "Mag") {MaxMana += 5*zdobyty_lvl;} DEX += zdobyty_lvl;
-                cout << "Max HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
+                cout << "\nMax HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
                 Sleep(9000);
                 system("cls");
-                // Zakończenie fabuły
-                return 0;
+                SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                cout << "Kapitan Goblinow upada na ziemie...\n"; Sleep(3000);
+                cout << "I cichym szeptem wypowiada swoje ostatnie slowa:\n"; Sleep(5000);
+                SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                cout << "K. Goblinow: Szykowalismy atak na wioske ale...\n"; Sleep(3000);
+                cout << "K. Goblinow: On... On nas Zdradzil...\n"; Sleep(4000);
+                cout << "K. Goblinow: To byla zemsta...\n"; Sleep(3000);
+                SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
+                system("cls");
+                cout << "K. Goblinow umarl..\n"; Sleep(2000);
+                cout << "Obok ciala znajdujesz mape..\n\n"; Sleep(3000);
+                cout << R"(        XXXXXX
+    XXXXX    XXXXXXXXXXXXXXXXXXXXXXXXXX
+    X|Swiantynia|       /0\    o      XXXX
+    X    /\             000   /0\        XXX
+  XXX   /--\             |    000          X
+  X    /_/\_\     |========|  000 |Wioska| XX
+XXX      ==      |==|    |==|  |     /\     XXX
+X         =========|      |=|  |    /__\      X
+X         /0\           |===|      /|<>|\     XX
+X        /000\  o     |===|     /\  |/\|      XXX
+XX       00000 /0\   |==|      /__\  = _     XX
+ XX        |  /000\ |==|      /|<>|\==/_\  XXX
+  X           00000 |==|       |/\|== | |  X
+  XXX           |    |======|  =====  |_|  X
+    XXX                   |=====   ====    XX
+      XXX              XXXXXXXXXXXXXXX      X
+        XXXX       XXXXX             XXX XXXX
+           XXXXXXXXX                   XXX)" << endl;
+                cout << "\nDo tego widzisz Kartke: 'Za 5 godzin atak!'\n"; Sleep(3000);
+                cout << "Musisz Powstrzymac Goblinow przed atakiem!\n"; Sleep(3000);
+                Rozdzial = 4;
+                SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
+                cout << "Quest: Idz do Swiantyni Goblinow i ich pokonaj raz na zawsze!\n"; Sleep(3000);
+                Quest = "Idz_do_swiantyni_goblinow__i_ich_pokonaj"; Quest_Postep = 0;
+                // Potencjalny Bad Ending
+                system("pause");
+                goto Rozdzial_1;
             } else {
                 SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
                 system("cls");
@@ -1122,7 +1195,7 @@ jgs     \)           (/)";
                     HP -= dmg;
                 }
                 szansa = rand() % 100 + 1;
-                if (40 > szansa) {
+                if (50 > szansa) {
                     SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                     cout << "\nZdobyles 1 Monete!\n";
                     Zdobyte_Monety++;
@@ -1135,13 +1208,14 @@ jgs     \)           (/)";
         SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         if (HP > 0) {
             Monety += Zdobyte_Monety;
-            exp += zdobyty_exp; lvl += exp/100;
-            int zdobyty_lvl = exp/100; exp = exp%100;
+            int level_przed = lvl;
+            exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+            int zdobyty_lvl = lvl - level_przed;
             cout << "Brawo Pokonales " << Przeciwnik_Nazwa;
             cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
             cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
             MaxHP += 10*zdobyty_lvl; if (Klasa == "Mag") {MaxMana += 5*zdobyty_lvl;} DEX += zdobyty_lvl;
-            cout << "Max HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
+            cout << "\nMax HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
             Sleep(9000);
             system("cls");
             cout << "Postanawiasz wrocic i odpoczanc po przeciwniku\n"; Sleep(2000);
@@ -1268,7 +1342,7 @@ Dziadek:
                         HP -= dmg;
                     }
                     szansa = rand() % 100 + 1;
-                    if (40 > szansa) {
+                    if (50 > szansa) {
                         SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                         cout << "\nZdobyles 1 Monete!\n";
                         Zdobyte_Monety++;
@@ -1294,8 +1368,9 @@ Dziadek:
         SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         if (HP > 0) {
             Monety += Zdobyte_Monety;
-            exp += zdobyty_exp; lvl += exp/100;
-            int zdobyty_lvl = exp/100; exp = exp%100;
+            int level_przed = lvl;
+            exp += zdobyty_exp; lvl += exp/100; exp = exp%100;
+            int zdobyty_lvl = lvl - level_przed;
             cout << "Brawo Pokonales 2 Gobliny (LVL 2)";
             cout << "\nZdobyles exp: " << zdobyty_exp << " i Monety: " << Zdobyte_Monety << "\n";
             cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
@@ -1313,7 +1388,7 @@ Dziadek:
             cout << "Uswiadamiasz sobie ze to nie byl przypadkowy atak!\n"; Sleep(10000);
             SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
             cout << "Jesli chcesz wiedziec dlaczego byl na kartce musisz dotrzec do Obozu Goblinow i odkryc prawde\n"; Sleep(5000);
-            Quest = "Idz_do_obozu_goblinow_i_dowiedz_sie_dlaczego_dziadek_byl_na_kartce"; Quest_Postep = 0; Rozdzial = 2.5;
+            Quest = "Idz_do_obozu_goblinow_i_dowiedz_sie_dlaczego_dziadek_byl_na_kartce"; Quest_Postep = 0; Rozdzial = 3;
             goto Rozdzial_1;
         } else {
             SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
@@ -1441,7 +1516,9 @@ __/_  /   \ ______/ ''   /'\_,__
                 cout << "Wybierz co chcesz kupic:\n";
                 cout << "1  Amulet Niesmiertelnosci  -  10 Zlotych Monet\n";
                 cout << "2  Potka Zdrowia (+50 HP i 10 MP) -  5 Zlotych Monet\n";
+                if (DEX > 35) {SetConsoleTextAttribute(hOut, WHITE);}
                 cout << "3  Potka Zrencznosci (+10 DEX)  -  5 Zlotych Monet\n";
+                SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 cout << "-- Bronie --\n";
                 if (Nazwa_Broni == "Zelazny_Miecz" || Nazwa_Broni == "Luk_i_Zelazne_Strzaly" || Nazwa_Broni == "Zelazny_Zaczarowany_Patyk") {SetConsoleTextAttribute(hOut, WHITE);}
                 if (Klasa == "Rycerz") { cout << "4  Zelazny Miecz (9 STR)  -  7 Zlotych Monet\n";}
@@ -1452,7 +1529,7 @@ __/_  /   \ ______/ ''   /'\_,__
                 cin >> wybor;
                 if (wybor == "1" && Monety >= 10 && Amulet_1 != "Amulet_Odrodzenia") {Amulet_1 = "Amulet_Odrodzenia"; Monety -= 10;}
                 else if (wybor == "2" && Monety >= 5) {HP += 50; Mana += 10; Monety -= 5;}
-                else if (wybor == "3" && Monety >= 5) {DEX += 10; Monety -= 5;}
+                else if (wybor == "3" && Monety >= 5 && DEX < 35) {DEX += 10; Monety -= 5;}
                 else if (wybor == "4" && Monety >= 7 && Klasa == "Rycerz" && Nazwa_Broni != "Zelazny_Miecz") {Nazwa_Broni = "Zelazny_Miecz"; Atak_Broni = 9; Monety -= 7;}
                 else if (wybor == "4" && Monety >= 7 && Klasa == "Lucznik" && Nazwa_Broni != "Luk_i_Zelazne_Strzaly") {Nazwa_Broni = "Luk_i_Zelazne_Strzaly"; Atak_Broni = 8; Monety -= 7;}
                 else if (wybor == "4" && Monety >= 7 && Klasa == "Mag" && Nazwa_Broni != "Zelazny_Zaczarowany_Patyk") {Nazwa_Broni = "Zelazny_Zaczarowany_Patyk"; Atak_Broni = 7; Monety -= 7;}
@@ -1463,6 +1540,8 @@ __/_  /   \ ______/ ''   /'\_,__
         } else if (wybor == "2") {goto Rozdzial_1;}
     }
     goto Rozdzial_1;
+
+Rozdzial_4:
 Outro:
     return 0;
 }
