@@ -171,7 +171,7 @@ Nowa_Gra:
         SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         cout << "1: Rycerz         HP: 125 | DEX: 5\n";
         cout << "2: Lucznik        HP: 100 | DEX: 10\n";
-        cout << "3: Mag            HP: 75  | DEX: 15 | Mana: 20 |\n";
+        cout << "3: Mag            HP: 100  | DEX: 15 | Mana: 20 |\n";
         SetConsoleTextAttribute(hOut, CYAN | FOREGROUND_INTENSITY);
         cout << "\\-------------------------------------------------------------------------------/\n";
         SetConsoleTextAttribute(hOut, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -189,7 +189,7 @@ Nowa_Gra:
             break;
         } else if (wybor == "3") {
             cout << Imie << ": Jestem Czarodziejem\n";
-            MaxHP = 75; DEX = 15; MaxMana = 20; Klasa = "Mag";
+            MaxHP = 100; DEX = 15; MaxMana = 20; Klasa = "Mag";
             break;
         }
         system("cls");
@@ -246,8 +246,8 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
                 Nazwa_Broni = "Luk_z_Strzalami"; Atak_Broni = 4;
                 break;
             } else if (Klasa == "Mag") {
-                cout << "Zaczarowany Patyk  |  STR: 3\n";
-                Nazwa_Broni = "Zaczarowany_Patyk"; Atak_Broni = 3;
+                cout << "Zaczarowany Patyk  |  STR: 4\n";
+                Nazwa_Broni = "Zaczarowany_Patyk"; Atak_Broni = 4;
                 break;
             }
         }
@@ -1244,7 +1244,7 @@ Las_Sciezka:
         cout << Imie << " LV: " << lvl << " exp: " << exp << "/100 Monety: " << Monety;
         MaxHP += 10*zdobyty_lvl; if (Klasa == "Mag") {MaxMana += 5*zdobyty_lvl;} DEX += zdobyty_lvl;
         cout << "\nMax HP: " << MaxHP << " Max Mana: " << MaxMana << " DEX: " << DEX;
-        Sleep(9000);
+        Sleep(7000);
         system("cls");
         cout << "Postanawiasz wrocic i odpoczanc po przeciwniku\n"; Sleep(2000);
         goto Las_Skip;
@@ -1253,7 +1253,7 @@ Las_Sciezka:
         system("cls");
         cout << "Niestety Przegrales z " << Przeciwnik_Nazwa;
         if (HP <= 0 && Amulet_1 != "Amulet_Odrodzenia") {cout << "\nNiestety nie masz Amuletu Odrodzenia - Umierasz\n"; Sleep(3000); return 0;}
-        else if (HP <= 0 && Amulet_1 == "Amulet_Odrodzenia") {cout << "\nZginoles ale masz Amulet Odrodzenia - Odrodzisz sie z Pelnym HP\n"; Sleep(3000); HP = MaxHP; Amulet_1 = ""; goto Rozdzial_1;}
+        else if (HP <= 0 && Amulet_1 == "Amulet_Odrodzenia") {cout << "\nZginoles ale masz Amulet Odrodzenia - Odrodzisz sie z Pelnym HP\n"; Sleep(3000); HP = MaxHP; Amulet_1 = ""; goto Las_Skip;}
     }
 // -----------------------------------------------------------------------------------------------
 // Dziadek
@@ -1607,7 +1607,7 @@ __/_  /   \ ______/ ''   /'\_,__
                 if (Nazwa_Broni == "Zelazny_Miecz" || Nazwa_Broni == "Luk_i_Zelazne_Strzaly" || Nazwa_Broni == "Zelazny_Zaczarowany_Patyk") {SetConsoleTextAttribute(hOut, WHITE);}
                 if (Klasa == "Rycerz") { cout << "4  Zelazny Miecz (9 STR)  -  7 Zlotych Monet\n";}
                 else if (Klasa == "Lucznik") { cout << "4  Zelazne Strzaly (8 STR)  -  7 Zlotych Monet\n";}
-                else if (Klasa == "Mag") { cout << "4  Zelazny Zaczarowany Patyk (7 STR)  -  7 Zlotych Monet\n";}
+                else if (Klasa == "Mag") { cout << "4  Zelazny Zaczarowany Patyk (8 STR)  -  7 Zlotych Monet\n";}
                 SetConsoleTextAttribute(hOut, YELLOW | FOREGROUND_INTENSITY);
                 cout << "5  Wyjdz\n";
                 cin >> wybor;
@@ -1616,7 +1616,7 @@ __/_  /   \ ______/ ''   /'\_,__
                 else if (wybor == "3" && Monety >= 5 && DEX < 35) {DEX += 10; Monety -= 5;}
                 else if (wybor == "4" && Monety >= 7 && Klasa == "Rycerz" && Nazwa_Broni != "Zelazny_Miecz") {Nazwa_Broni = "Zelazny_Miecz"; Atak_Broni = 9; Monety -= 7;}
                 else if (wybor == "4" && Monety >= 7 && Klasa == "Lucznik" && Nazwa_Broni != "Luk_i_Zelazne_Strzaly") {Nazwa_Broni = "Luk_i_Zelazne_Strzaly"; Atak_Broni = 8; Monety -= 7;}
-                else if (wybor == "4" && Monety >= 7 && Klasa == "Mag" && Nazwa_Broni != "Zelazny_Zaczarowany_Patyk") {Nazwa_Broni = "Zelazny_Zaczarowany_Patyk"; Atak_Broni = 7; Monety -= 7;}
+                else if (wybor == "4" && Monety >= 7 && Klasa == "Mag" && Nazwa_Broni != "Zelazny_Zaczarowany_Patyk") {Nazwa_Broni = "Zelazny_Zaczarowany_Patyk"; Atak_Broni = 8; Monety -= 7;}
                 else if (wybor == "5") {goto Wioska;}
                 if (HP > MaxHP) {HP = MaxHP;}
                 if (Mana > MaxMana) {Mana = MaxMana;}
